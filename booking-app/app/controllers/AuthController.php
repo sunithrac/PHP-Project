@@ -2,6 +2,7 @@
     namespace app\controllers;
     use app\services\AuthService;
     use Exception;
+    use app\controllers\localStorage;
 
     require_once __DIR__ . '/../services/AuthService.php';
 
@@ -23,7 +24,6 @@
                     $_POST['email'],
                     $_POST['password']
                 );
-
                 echo json_encode($result);
             } catch (Exception $e) {
                 http_response_code(401);

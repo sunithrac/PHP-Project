@@ -3,12 +3,14 @@
 
     use app\repositories\UserRepository;
     use app\helpers\ConstantMessages;
+    use app\core\JWT;
     use PDO;
     use Exception;
 
     require_once __DIR__ . '/../repositories/UserRepository.php';
     require_once __DIR__ . '/../helpers/ConstantMessages.php';
     require_once __DIR__ . '/../config/Database.php';
+    require_once __DIR__ . '/../core/JWT.php';
 
     class AuthService
     {
@@ -34,7 +36,23 @@
 
             unset($user['password']);
 
-            return $user;
+            $payload = [
+                "user_id" => $user['id'],
+                "email"   => $user['email'],
+                "exp"     => time() + (60 * 60) // 1 hour
+            ];
+
+            $token = JWT::encode($payload);
+
+            return [
+                "message" => "Login successful",
+                "token"   => $token,
+                "user"    => [
+                    "id"    => $user['id'],
+                    "name"  => $user['name'],
+                    "email" => $user['email']
+                ]
+            ];
         }
 
         public function register(array $data)
