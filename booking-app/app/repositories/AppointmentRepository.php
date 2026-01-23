@@ -12,20 +12,37 @@
             $this->db = \app\config\Database::connect();
         }
 
-        public function create($data)
+        public function create(array $data)
         {
-            $stmt = $this->db->prepare(
-                "INSERT INTO appointments
-                (patient_id, doctor_id, appointment_date, status)
-                VALUES (?,?,?, 'BOOKED')"
-            );
+            print_r($data);
+            $sql = "
+                INSERT INTO appointments
+                (user_id, doctor_id, appointment_date, appointment_time, status)
+                VALUES (:user_id, :doctor_id, :appointment_date, :appointment_time, :status)
+            ";
+
+            $stmt = $this->db->prepare($sql);
 
             $stmt->execute([
-                $data['patient_id'],
-                $data['doctor_id'],
-                $data['appointment_date'],
-                'Booked'
+                ':user_id'   => $data['user_id'],
+                ':doctor_id' => $data['doctor_id'],
+                ':appointment_date'      => $data['appointment_date'],
+                ':appointment_time'      => $data['appointment_time'],
+                ':status'    => 'BOOKED'
             ]);
+            // $stmt = $this->db->prepare(
+            //     "INSERT INTO appointments
+            //     (patient_id, doctor_id, appointment_date, appointment_time, status)
+            //     VALUES (?,?,?,?,'BOOKED')"
+            // );
+
+            // $stmt->execute([
+            //     $patient_id,
+            //     $doctor_id,
+            //     $appointment_date,
+            //     $appointment_time,
+            //     'Booked'
+            // ]);
 
             return ["message" => ConstantMessages::BOOKING_MESSAGE];
         }
@@ -47,7 +64,7 @@
                     a.id,
                     d.specialization,
                     a.appointment_date,
-                    a.time_slot,
+                    a.appointment_time,
                     a.status
                 FROM appointments a
                 JOIN doctors d ON a.doctor_id = d.id

@@ -55,7 +55,7 @@
                 }
 
                 $this->appointmentService->cancel(
-                    $this->userId,
+                    $_POST['user_id'],
                     $_POST['appointment_id']
                 );
 

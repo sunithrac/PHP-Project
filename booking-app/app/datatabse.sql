@@ -22,6 +22,7 @@ CREATE TABLE doctors (
 --     FOREIGN KEY (doctor_id) REFERENCES doctors(id) ON DELETE CASCADE,
 --     INDEX (doctor_id, available_date)
 -- );
+-- eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJlbWFpbCI6IjEyMzRAZ21haWwuY29tIiwiZXhwIjoxNzY5MDE5ODY3fQ==.UfdLIx0mt/LjP9zJDP+5HKeeLdAR1gGa9xf4Az6ezdQ=
 
 CREATE TABLE appointments (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -49,6 +50,11 @@ ADD COLUMN available_to TIME;
 /*  Sample Data 
     password_hash()
 */
+ALTER TABLE appointments
+ADD created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+ALTER TABLE appointments
+RENAME COLUMN patient_id TO user_id;
 
 INSERT INTO users (name, email, password, role)
 VALUES (

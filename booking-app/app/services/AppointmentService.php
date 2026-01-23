@@ -20,7 +20,7 @@
             $this->appointmentRepo = new AppointmentRepository($db);
         }
 
-        public function bookAppointment($data)
+        public function bookAppointment(array $data)
         {
             return $this->appointmentRepo->create($data);
         }
