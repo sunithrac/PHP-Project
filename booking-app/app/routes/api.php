@@ -39,10 +39,10 @@
         (new AppointmentController())->history();
         exit;
     }
-    http_response_code(404);
-    echo json_encode([
-        "error" => "Route not found",
-        "uri" => $uri,
-        "method" => $method
-    ]);
+    // http_response_code(404);
+    // echo json_encode([
+    //     "error" => "Route not found",
+    //     "uri" => $uri,
+    //     "method" => $method
+    // ]);
 ?>

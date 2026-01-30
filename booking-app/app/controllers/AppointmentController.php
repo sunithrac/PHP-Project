@@ -5,6 +5,7 @@
     use Exception;
     use App\Core\AuthMiddleware;
     use app\helpers\ConstantMessages;
+    use DateTime;
 
     require_once __DIR__ . '/../services/AppointmentService.php';
     require_once __DIR__. '/../core/AuthMiddleware.php';
@@ -32,16 +33,35 @@
             }
 
             try {
-                $service = new AppointmentService();
-                $service->bookAppointment($_POST);
+                $doctorId = (int)$_POST['doctor_id'];
+                $date = $_POST['date'];
+                $time = $_POST['time'];
 
-                Response::json([
-                    "status" => "success",
-                    "message" => ConstantMessages::AppOINTMENT_SUCCESS
-                ]);
+                // Date validation
+                $dateObj = DateTime::createFromFormat('Y-m-d', $date);
+                if (!$dateObj || $dateObj->format('Y-m-d') !== $date) {
+                    throw new Exception('Invalid date');
+                }
+
+                if ($dateObj < new DateTime('today')) {
+                    throw new Exception('Date cannot be past');
+                }
+
+                // Time validation
+                if (!DateTime::createFromFormat('H:i', $time)) {
+                    throw new Exception('Invalid time');
+                }
+
+                $this->appointmentService->bookAppointment($_POST);
+
+                echo json_encode(['status' => 'success']);
 
             } catch (Exception $e) {
-                Response::error($e->getMessage(), 400);
+                http_response_code(400);
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => $e->getMessage()
+                ]);
             }
         }
 
