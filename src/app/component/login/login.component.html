@@ -1,3 +1,24 @@
-<input [(ngModel)]="email" placeholder="Email">
-<input [(ngModel)]="password" type="password" placeholder="Password">
-<button (click)="login()">Login</button>
+<input type="email" formControlName="email" placeholder="Email">
+
+<div *ngIf="loginForm.get('email')?.touched">
+  <small *ngIf="loginForm.get('email')?.errors?.['required']">
+    Email is required
+  </small>
+  <small *ngIf="loginForm.get('email')?.errors?.['email']">
+    Invalid email format
+  </small>
+</div>
+
+<input type="password" formControlName="password" placeholder="Password">
+
+<div *ngIf="loginForm.get('password')?.touched">
+  <small *ngIf="loginForm.get('password')?.errors?.['required']">
+    Password is required
+  </small>
+  <small *ngIf="loginForm.get('password')?.errors?.['minlength']">
+    Minimum 8 characters
+  </small>
+  <small *ngIf="loginForm.get('password')?.errors?.['pattern']">
+    Must contain 1 uppercase & 1 number
+  </small>
+</div>

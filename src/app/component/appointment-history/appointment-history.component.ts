@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppointmentService } from '../../core/services/appointment-history.service';
+import { FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-appointment',
@@ -16,9 +17,15 @@ export class AppointmentHistoryComponent {
 
   constructor(
     private appointmentService: AppointmentService,
-    private router: Router
+    private router: Router,
+    private fb: FormBuilder
   ) {
     this.doctor = history.state.doctor;
+    this.fb.group({
+      doctor_id: ['', Validators.required],
+      date: ['', Validators.required],
+      time: ['', Validators.required]
+    });
     this.loadHistory();
   }
 

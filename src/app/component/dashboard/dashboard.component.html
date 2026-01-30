@@ -1,26 +1,42 @@
-<h2>Welcome, {{ user.email }}</h2>
-
-<div class="card">
-  <h3>User Details</h3>
-  <p><b>Email:</b> {{ user.email }}</p>
-  <p><b>User ID:</b> {{ user.user_id }}</p>
-</div>
-
-<div class="card">
+<form [formGroup]="bookingForm" class="card" (ngSubmit)="book()">
   <h3>Book Appointment</h3>
 
-  <select [(ngModel)]="booking.doctor_id">
+  <!-- Doctor -->
+  <select formControlName="doctor_id">
     <option value="">Select Doctor</option>
     <option *ngFor="let d of doctors" [value]="d.id">
       {{ d.name }} - {{ d.specialization }}
     </option>
   </select>
 
-  <input type="date" [(ngModel)]="booking.date">
+  <div *ngIf="bookingForm.get('doctor_id')?.touched && bookingForm.get('doctor_id')?.invalid">
+    <small>Doctor is required</small>
+  </div>
 
-  <input type="time" [(ngModel)]="booking.time">
+  <!-- Date -->
+  <input
+    type="date"
+    formControlName="date"
+    [min]="today"
+  />
 
-  <button (click)="book()">Book</button>
-</div>
+  <div *ngIf="bookingForm.get('date')?.touched && bookingForm.get('date')?.invalid">
+    <small>Date is required</small>
+  </div>
 
-<button (click)="goToHistory()">View Appointment History</button>
+  <!-- Time -->
+  <input
+    type="time"
+    formControlName="time"
+  />
+
+  <div *ngIf="bookingForm.get('time')?.touched && bookingForm.get('time')?.invalid">
+    <small>Time is required</small>
+  </div>
+
+  <button type="submit" [disabled]="bookingForm.invalid">
+    Book
+  </button>
+</form>
+
+<button (click)="goToHistory()">View History</button>
